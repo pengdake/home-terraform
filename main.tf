@@ -12,7 +12,7 @@ provider "libvirt" {
 
 module "k3s_nodes" {
   source = "./modules/vm"
-  for_each = { for node in var.k3s_nodes: node.host_name => node }
+  for_each = { for node in var.k3s_nodes: node.hostname => node }
   hostname = each.value.hostname
   ip = each.value.ip
   username = each.value.username
