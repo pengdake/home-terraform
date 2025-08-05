@@ -1,9 +1,3 @@
-variable "base_image" {
-    type        = string
-    default     = "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.img"
-    description = "Base image URL for K3s nodes"
-}
-
 variable "vm_cpu" {
     type        = number
     default     = 4
@@ -23,10 +17,11 @@ variable "vm_disk_size" {
   
 }
 
-variable "bridge_network" {
+
+variable "libvirt_pool_name" {
     type        = string
-    default     = "br0"
-    description = "Bridge network name for K3s nodes"
+    default     = "default"
+    description = "Name of the libvirt storage pool"
   
 }
 
@@ -37,12 +32,6 @@ variable "libvirt_pool_path" {
   
 }
 
-variable "libvirt_url" {
-    type        = string
-    default     = "qemu+ssh://root@192.168.31.97/system"
-    description = "Libvirt connection URL"
-  
-}
 
 variable "default_network" {
     type        = string
@@ -53,7 +42,7 @@ variable "default_network" {
 
 variable "ssh_public_key" {
     type        = string
-    default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ+B4nZpd1lHkQ/SLDw+OggtvBi+JCv3moy5dcWokQvS"
+    default     = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ+B4nZpd1lHkQ/SLDw+OggtvBi+JCv3moy5dcWokQvS pdk@jmk"
     description = "SSH public key for K3s nodes"
   
 }
@@ -109,4 +98,16 @@ variable "k3s_hosts" {
     type        = map(string)
     description = "Map of K3s node hostnames to their IP addresses"
   
+}
+
+variable "network_id" {
+    type        = string
+    description = "ID of the network to attach K3s nodes to"
+    default     = null
+}
+
+variable "k3s_node_img_id" {
+    type        = string
+    description = "Base image volume for K3s nodes"
+    default     = null 
 }

@@ -1,4 +1,16 @@
-data "template_file" "cloud_init_user_datas" {
+terraform {
+  required_providers {
+    libvirt = {
+      source = "dmacvicar/libvirt"
+    }
+  }
+}
+
+locals {
+  k3s_hosts_set = join("\n", [for host, ip in var.k3s_hosts : "  - echo ${ip} ${host} >> /etc/hosts"])
+}
+
+data "template_file" "cloud_init_user_data" {
   template = file("${path.module}/templates/cloud_init_user_data.tpl")
   vars = {
     hostname = var.hostname
@@ -6,14 +18,14 @@ data "template_file" "cloud_init_user_datas" {
     username = var.username
     password = var.password
     ssh_key = var.ssh_public_key
-    hosts = var.k3s_hosts
+    k3s_hosts_set = local.k3s_hosts_set
   }
 }
 
 data "template_file" "cloud_init_network_config" {
   template = file("${path.module}/templates/cloud_init_network_config.tpl")
   vars = {
-    nameservers = var.nameservers
+    nameservers = join(",", var.nameservers)
     netmask = var.netmask
     gateway = var.gateway
     ip = var.ip
@@ -22,11 +34,13 @@ data "template_file" "cloud_init_network_config" {
   
 }
 
-resource "libvirt_pool" "default" {
-  name = "default"
-  type = "dir"
-  path = var.libvirt_pool_path
-}
+#resource "libvirt_pool" "default" {
+#  name = "default"
+#  type = "dir"
+#  target {
+#    path = var.libvirt_pool_path
+#  }
+#}
 
 resource "libvirt_cloudinit_disk" "k3s-node-cloudinit" {
   name       = "${var.hostname}-cloudinit.iso"
@@ -36,31 +50,18 @@ instance-id: ${var.hostname}
 local-hostname: ${var.hostname}
 EOF
   network_config = data.template_file.cloud_init_network_config.rendered
-  pool       = libvirt_pool.default.name
+  # pool       = libvirt_pool.default.name
+  pool = var.libvirt_pool_name
 }
 
-
-resource "libvirt_volume" "k3s-node-img" {
-  name     = "${var.hostname}.qcow2"
-  pool     = libvirt_pool.default.name
-  source   = var.base_image
-  format   = "qcow2"
-}
 
 resource "libvirt_volume" "k3s-node-disk" {
   name     = "${var.hostname}-disk"
-  base_volume_id = libvirt_volume.k3s-node-img.id
-  pool     = libvirt_pool.default.name
+  base_volume_id = var.k3s_node_img_id
+  pool     = var.libvirt_pool_name
   size     = var.vm_disk_size 
 }
 
-resource "libvirt_network" "k3s-network" {
-  name = var.bridge_network
-  mode = "bridge"
-  bridge = var.bridge_network
-  autostart = true
-  
-}
 
 resource "libvirt_domain" "k3s-node" {
   name   = var.hostname
@@ -71,9 +72,12 @@ resource "libvirt_domain" "k3s-node" {
     volume_id = libvirt_volume.k3s-node-disk.id
   }
 
+  boot_device {
+    dev = [ "hd", "network"]
+  }
 
   network_interface {
-    network_id = libvirt_network.k3s-network.id
+    network_id = var.network_id
     mac = var.mac
   }
 
@@ -90,4 +94,5 @@ resource "libvirt_domain" "k3s-node" {
     target_type = "serial"
     target_port = "0"
   }
+  qemu_agent = true
 }
