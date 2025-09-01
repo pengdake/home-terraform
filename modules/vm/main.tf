@@ -68,6 +68,10 @@ resource "libvirt_domain" "k3s-node" {
   memory = var.vm_memory
   vcpu   = var.vm_cpu
 
+  cpu {
+    mode = "host-passthrough"
+  }
+
   disk {
     volume_id = libvirt_volume.k3s-node-disk.id
   }
