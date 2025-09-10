@@ -20,16 +20,16 @@ variable "k3s_nodes" {
             nameservers = ["8.8.8.8", "114.114.114.114"]
             gateway = "192.168.31.1"
         },
-        {
-            hostname = "k3s-node2",
-            ip = "192.168.31.95",
-            username = "pdk",
-            password = "abc123",  # Replace with your desired password
-            mac = "52:54:00:12:34:57"  # Example MAC address, adjust as needed
-            netmask = "24"
-            nameservers = ["8.8.8.8", "114.114.114.114"]
-            gateway = "192.168.31.1"
-        },
+#        {
+#            hostname = "k3s-node2",
+#            ip = "192.168.31.95",
+#            username = "pdk",
+#            password = "abc123",  # Replace with your desired password
+#            mac = "52:54:00:12:34:57"  # Example MAC address, adjust as needed
+#            netmask = "24"
+#            nameservers = ["8.8.8.8", "114.114.114.114"]
+#            gateway = "192.168.31.1"
+#        },
         {
             hostname = "k3s-node3",
             ip = "192.168.31.96",
