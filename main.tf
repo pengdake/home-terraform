@@ -7,7 +7,7 @@ terraform {
 }
 
 provider "libvirt" {
-  uri = var.libvirt_url 
+  uri = var.libvirt_uri 
 }
 
 locals {
@@ -35,7 +35,7 @@ module "k3s_node" {
   providers = {
     libvirt = libvirt 
   }
-  for_each = { for node in var.k3s_nodes: node.hostname => node }
+  for_each = { for node in var.k3s_nodes: node.hostname => node if node.libvirt_uri == var.libvirt_uri }
   hostname = each.value.hostname
   ip = each.value.ip
   username = each.value.username

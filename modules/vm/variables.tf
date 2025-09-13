@@ -1,6 +1,6 @@
 variable "vm_cpu" {
     type        = number
-    default     = 4
+    default     = 6
     description = "Number of vCPUs for each K3s node"
 }
 

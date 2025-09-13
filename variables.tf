@@ -1,6 +1,7 @@
 
 variable "k3s_nodes" {
     type        = list(object({
+        libvirt_uri = string
         hostname = string
         ip   = string
         username = string
@@ -10,40 +11,10 @@ variable "k3s_nodes" {
         nameservers = list(string)
         gateway = string
     }))
-    default     = [{
-            hostname = "k3s-node1",
-            ip = "192.168.31.94",
-            username = "pdk",
-            password = "abc123",  # Replace with your desired password
-            mac = "52:54:00:12:34:56"  # Example MAC address, adjust as needed
-            netmask = "24"
-            nameservers = ["8.8.8.8", "114.114.114.114"]
-            gateway = "192.168.31.1"
-        },
-#        {
-#            hostname = "k3s-node2",
-#            ip = "192.168.31.95",
-#            username = "pdk",
-#            password = "abc123",  # Replace with your desired password
-#            mac = "52:54:00:12:34:57"  # Example MAC address, adjust as needed
-#            netmask = "24"
-#            nameservers = ["8.8.8.8", "114.114.114.114"]
-#            gateway = "192.168.31.1"
-#        },
-        {
-            hostname = "k3s-node3",
-            ip = "192.168.31.96",
-            username = "pdk",
-            password = "abc123",  # Replace with your desired password
-            mac = "52:54:00:12:34:58"  # Example MAC address, adjust as needed
-            netmask = "24"
-            nameservers = ["8.8.8.8", "114.114.114.114"]
-            gateway = "192.168.31.1"
-        }
-    ]
+    default     = []
 }
 
-variable "libvirt_url" {
+variable "libvirt_uri" {
     type        = string
     default     = "qemu+ssh://root@192.168.31.97/system"
     description = "Libvirt connection URL"
@@ -83,3 +54,4 @@ variable "k3s_node_img_id" {
     default     = null
   
 }
+

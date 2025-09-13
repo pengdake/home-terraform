@@ -34,13 +34,13 @@ data "template_file" "cloud_init_network_config" {
   
 }
 
-#resource "libvirt_pool" "default" {
-#  name = "default"
-#  type = "dir"
-#  target {
-#    path = var.libvirt_pool_path
-#  }
-#}
+resource "libvirt_pool" "default" {
+  name = "default"
+  type = "dir"
+  target {
+    path = var.libvirt_pool_path
+  }
+}
 
 resource "libvirt_cloudinit_disk" "k3s-node-cloudinit" {
   name       = "${var.hostname}-cloudinit.iso"
@@ -50,7 +50,7 @@ instance-id: ${var.hostname}
 local-hostname: ${var.hostname}
 EOF
   network_config = data.template_file.cloud_init_network_config.rendered
-  # pool       = libvirt_pool.default.name
+  #pool       = libvirt_pool.default.name
   pool = var.libvirt_pool_name
 }
 
@@ -58,7 +58,8 @@ EOF
 resource "libvirt_volume" "k3s-node-disk" {
   name     = "${var.hostname}-disk"
   base_volume_id = var.k3s_node_img_id
-  pool     = var.libvirt_pool_name
+  #pool     = libvirt_pool.default.name
+  pool = var.libvirt_pool_name
   size     = var.vm_disk_size 
 }
 
