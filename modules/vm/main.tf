@@ -68,6 +68,7 @@ resource "libvirt_domain" "k3s-node" {
   name   = var.hostname
   memory = var.vm_memory
   vcpu   = var.vm_cpu
+  autostart = true
 
   cpu {
     mode = "host-passthrough"

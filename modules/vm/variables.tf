@@ -12,7 +12,7 @@ variable "vm_memory" {
 
 variable "vm_disk_size" {
     type        = number
-    default     = 100 * 1024 * 1024 * 1024  # 100 GB
+    default     = 300 * 1024 * 1024 * 1024  # 300 GB
     description = "Disk size in bytes for each K3s node"
   
 }
