@@ -20,12 +20,25 @@ final_message: |
   uptime: $uptime
 growpart:
   mode: auto
-
+disk_setup:
+  /dev/vdb:
+    table_type: gpt
+    layout: true
+    overwrite: false
+fs_setup:
+  - label: data-disk
+    device: /dev/vdb1
+    filesystem: ext4
+    overwrite: false
+mounts:
+  - [ /dev/vdb1, /data ]
 package_update: true
 package_upgrade: true
 packages:
   - qemu-guest-agent
 
 runcmd:
-${k3s_hosts_set}
+%{ for host,ip in hosts }
+  - echo ${ip} ${host} >> /etc/hosts
+%{ endfor ~}
   - systemctl enable --now qemu-guest-agent

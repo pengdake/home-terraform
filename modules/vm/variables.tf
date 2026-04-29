@@ -1,19 +1,39 @@
 variable "vm_cpu" {
     type        = number
-    default     = 6
+    default     = 8
     description = "Number of vCPUs for each K3s node"
+}
+
+variable "vm_current_cpu" {
+    type        = number
+    default     = 6
+    description = "Current number of vCPUs for each K3s node"
+  
 }
 
 variable "vm_memory" {
     type        = number
-    default     = 12288
-    description = "Memory size in MB for each K3s node"
+    default     = 16 * 1024 * 1024  # 16 GB in KB
+    description = "Memory size in KB for each K3s node"
+}
+
+variable "vm_current_memory" {
+    type        = number
+    default     = 12 * 1024 * 1024  # 16 GB in KB
+    description = "Current memory size in KB for each K3s node"
 }
 
 variable "vm_disk_size" {
     type        = number
     default     = 300 * 1024 * 1024 * 1024  # 300 GB
     description = "Disk size in bytes for each K3s node"
+  
+}
+
+variable "vm_root_size" {
+    type        = number
+    default     = 30 * 1024 * 1024 * 1024  # 30 GB
+    description = "Root disk size in bytes for each K3s node"
   
 }
 
@@ -106,8 +126,22 @@ variable "network_id" {
     default     = null
 }
 
-variable "k3s_node_img_id" {
+variable "base_img_path" {
     type        = string
-    description = "Base image volume for K3s nodes"
-    default     = null 
+    description = "Path to the base image for K3s nodes"
+    default     = null
+}
+
+variable "vnc_password" {
+    type        = string
+    description = "Password for VNC access to the K3s nodes"
+    default     = "abc123"  # Replace with your desired VNC password
+  
+}
+
+
+variable "bridge_network" {
+    type        = string
+    description = "Bridge network name for K3s nodes"
+    default     = null
 }

@@ -30,7 +30,7 @@ variable "bridge_network" {
 
 variable "base_image" {
     type        = string
-    default     = "https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.img"
+    default     = "https://cloud-images.ubuntu.com/releases/26.04/release/ubuntu-26.04-server-cloudimg-amd64.img"
     description = "Base image URL for K3s nodes"
 }
 
@@ -41,17 +41,11 @@ variable "libvirt_pool_name" {
   
 }
 
-variable "k3s_node_img_name" {
+variable "base_img_name" {
     type        = string
-    default     = "ubuntu-24.04.qcow2"
+    default     = "ubuntu-26.04.qcow2"
     description = "Name of the K3s node image volume"
   
 }
 
-variable "k3s_node_img_id" {
-    type        = string
-    description = "ID of the K3s node image volume"
-    default     = null
-  
-}
 
