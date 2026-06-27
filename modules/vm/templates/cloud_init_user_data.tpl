@@ -25,13 +25,22 @@ disk_setup:
     table_type: gpt
     layout: true
     overwrite: false
+  /dev/vdc:
+    table_type: gpt
+    layout: true
+    overwrite: false
 fs_setup:
   - label: data-disk
     device: /dev/vdb1
     filesystem: ext4
     overwrite: false
+  - label: rancher-disk
+    device: /dev/vdc1
+    filesystem: ext4
+    overwrite: false
 mounts:
   - [ /dev/vdb1, /data ]
+  - [ /dev/vdc1, /rancher ]
 package_update: true
 package_upgrade: true
 packages:

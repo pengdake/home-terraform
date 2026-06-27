@@ -60,6 +60,17 @@ resource "libvirt_volume" "k3s-node-disk" {
   }
 }
 
+resource "libvirt_volume" "k3s-node-rancher-disk" {
+  name     = "${var.hostname}-rancher-disk"
+  pool = var.libvirt_pool_name
+  capacity = var.vm_disk_size 
+  target = {
+    format = {
+      type = "qcow2"
+    }
+  }
+}
+
 resource "libvirt_volume" "k3s-node-root-disk" {
   name     = "${var.hostname}-root-disk"
   pool = var.libvirt_pool_name
@@ -128,6 +139,21 @@ resource "libvirt_domain" "k3s-node" {
         }
         target = {
           dev = "vdb"
+          bus = "virtio"
+        }
+        driver = {
+          type = "qcow2"
+        }
+      },
+      {
+        source = {
+          volume = {
+            pool = var.libvirt_pool_name
+            volume = libvirt_volume.k3s-node-rancher-disk.name
+          }
+        }
+        target = {
+          dev = "vdc"
           bus = "virtio"
         }
         driver = {
