@@ -32,9 +32,15 @@ variable "vm_disk_size" {
 
 variable "vm_root_size" {
     type        = number
-    default     = 30 * 1024 * 1024 * 1024  # 30 GB
+    default     = 50 * 1024 * 1024 * 1024  # 50 GB
     description = "Root disk size in bytes for each K3s node"
   
+}
+
+variable "vm_rancher_size" {
+    type        = number
+    default     = 50 * 1024 * 1024 * 1024  # 50 GB
+    description = "Rancher disk size in bytes for each K3s node" 
 }
 
 
@@ -137,6 +143,12 @@ variable "vnc_password" {
     description = "Password for VNC access to the K3s nodes"
     default     = "abc123"  # Replace with your desired VNC password
   
+}
+
+variable "vnc_port" {
+    type        = number
+    description = "VNC port for the K3s node"
+    default     = null
 }
 
 

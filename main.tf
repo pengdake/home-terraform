@@ -57,4 +57,5 @@ module "k3s_node" {
   base_img_path = libvirt_volume.base_img.path
   bridge_network = var.bridge_network
   libvirt_pool_name = var.libvirt_pool_name
+  vnc_port = each.value.vnc_port
 }

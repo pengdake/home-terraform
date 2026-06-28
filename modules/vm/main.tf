@@ -63,7 +63,7 @@ resource "libvirt_volume" "k3s-node-disk" {
 resource "libvirt_volume" "k3s-node-rancher-disk" {
   name     = "${var.hostname}-rancher-disk"
   pool = var.libvirt_pool_name
-  capacity = var.vm_disk_size 
+  capacity = var.vm_rancher_size 
   target = {
     format = {
       type = "qcow2"
@@ -194,7 +194,7 @@ resource "libvirt_domain" "k3s-node" {
         vnc = {
           listen = "0.0.0.0"
           autoport    = false
-          port        = 5901
+          port        = var.vnc_port
           passwd      = var.vnc_password
         }
       }

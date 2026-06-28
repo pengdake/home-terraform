@@ -10,6 +10,7 @@ variable "k3s_nodes" {
         netmask = string
         nameservers = list(string)
         gateway = string
+        vnc_port = number
     }))
     default     = []
 }

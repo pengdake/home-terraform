@@ -8,7 +8,6 @@ users:
     groups: sudo
     shell: /bin/bash
     lock_passwd: false
-    plain_text_passwd: false
     passwd: ${password}
 locale: zh_CN.UTF-8
 timezone: Asia/Shanghai
@@ -40,14 +39,20 @@ fs_setup:
     overwrite: false
 mounts:
   - [ /dev/vdb1, /data ]
-  - [ /dev/vdc1, /rancher ]
+  - [ /dev/vdc1, /var/lib/rancher ]
+apt:
+  preserve_sources_list: true
 package_update: true
-package_upgrade: true
 packages:
   - qemu-guest-agent
 
-runcmd:
+bootcmd:
 %{ for host,ip in hosts }
   - echo ${ip} ${host} >> /etc/hosts
 %{ endfor ~}
+
+runcmd:
+  - systemctl stop unattended-upgrades apt-daily.timer apt-daily-upgrade.timer multipathd
+  - systemctl disable unattended-upgrades apt-daily.timer apt-daily-upgrade.timer multipathd
   - systemctl enable --now qemu-guest-agent
+  - systemctl restart qemu-guest-agent
